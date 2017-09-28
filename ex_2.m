@@ -1,5 +1,3 @@
-% Work in progress
-
 % x[0] = A + w[0]
 % x[1] = A + w[1]
 % C = sigma_squared * [1 rho; rho 1]
@@ -15,7 +13,7 @@ clearvars; clc; close all; format long;
 syms sigma_squared rho x0 x1;
 
 % initialize the problem
-X = [x0 x1]';
+X = [x0 x1].';
 H = [1 1]';
 C = sigma_squared * [1 rho; rho 1];
 
@@ -32,36 +30,36 @@ disp(A_hat);
 
 % initialize the problem
 A = 3;
-rho = 0.5;
 sig_sq = 0.3;
 
+MC = 100000;
+i = 1;
+for rho = -1:1:1
+    C = [1 rho; rho 1] * sig_sq;
 
-% form the corelation
-C = [1 rho; rho 1] * sig_sq;
+    [P, D] = eig(C);
+    K = P * sqrt(D);
 
-[P, D] = eig(C);
-K = P * sqrt(D);
+    estimated_A = zeros(MC, 1);
+    for mc = 1:MC
+        W = randn(2, 1);
+        % where Z is the correlated noise
+        Z = K * W;
 
-MC = 100;
-
-simulated_X = zeros(MC, 2);
-estimated_X = zeros(MC, 1);
-for mc = 1:MC
-    W = randn(2, 1);
-    % where Z is the correlated noise
-    Z = K * W;
+        X = A * [1 1]' + Z;    
+        estimated_A(mc, 1) = dot(X, [1/2 1/2]);
+    end
     
-    X = A * [1 1]' + Z;
-    simulated_X(mc, :) = X;
+    [n x] = hist(estimated_A, 256);
+    subplot(2, 2, i);
+    plot(x, n / (sum(n) * (x(2) - x(1))), 'r-', x, normpdf(x, A, sqrt(sig_sq * (1 + rho) / 2)));
+    title(strcat('rho = ', num2str(rho)));
+    legend('Simulated', 'Theoretical');
     
-    estimated_X(mc, 1) = dot(X, [1/2 1/2]);
+    i = i + 1;
 end
 
-plot(simulated_X);
-hold on;
-plot(estimated_X);
-legend('x0','x1','estimator');
-% [p, n] = hist(estimated_X, 256);
-% plot(norm(estimated_X));
+
 disp(sig_sq * (1 + rho) / 2);
-disp(var(estimated_X));
+disp(var(estimated_A));
+

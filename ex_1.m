@@ -22,14 +22,15 @@ for mc = 1:MC
     % calculate simulated X values where X is Nx1 matrix
     X = A * R + sqrt(sigma_squared) * randn(N, 1);
     % fill up estimations according to the estimator we found:
-    % estimator_A = sum(x[n]*r[n]) / sum(r[n]^2)
     estimations(mc, 1) = dot(X, R) / dot(R, R);
 end
 
 % calculate the stats of the estimator
-stats = [mean(estimations) std(estimations) var(estimations)];
-disp(['mean', 'std', 'variance']);
-disp(stats);
+stats = [mean(estimations) var(estimations)];
+disp(strcat('estimated mean : ', num2str(stats(1))));
+disp(strcat('estimated variance : ', num2str(stats(2))));
 
 % display histogram of the estimator
-histogram(estimations);
+[n x] = hist(estimations, 56);
+plot(x, n / (sum(n) * (x(2) - x(1))), 'r-', x, normpdf(x, A, sqrt(sigma_squared)));
+legend('Simulated', 'Theoretical');

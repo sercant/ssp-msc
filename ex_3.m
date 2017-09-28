@@ -15,10 +15,10 @@ disp('= 0');
 %%%%%%%%%%%%%%%%%%%%%%%
 
 % initialize MC loop
-thetha = 1;
+thetha = 3;
 N = 100;
 
-MC = 10000;
+MC = 100000;
 
 MLE_estimations = zeros(MC, 1);
 A_estimations = zeros(MC, 1);
