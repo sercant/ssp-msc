@@ -34,32 +34,32 @@ sig_sq = 0.3;
 
 MC = 100000;
 i = 1;
+disp('Monte-Carlo simulations:');
 for rho = -1:1:1
-    C = [1 rho; rho 1] * sig_sq;
-
-    [P, D] = eig(C);
-    K = P * sqrt(D);
+    C = [1 rho; rho 1] .* sig_sq;
 
     estimated_A = zeros(MC, 1);
     for mc = 1:MC
-        W = randn(2, 1);
-        % where Z is the correlated noise
-        Z = K * W;
+        % where Z is the correlated noise reference:
+        % https://en.wikipedia.org/wiki/Cholesky_decomposition
+        Z = chol(C)' * randn(2, 1);
 
-        X = A * [1 1]' + Z;    
+        X = A * [1 1]' + Z;
         estimated_A(mc, 1) = dot(X, [1/2 1/2]);
     end
     
-    [n x] = hist(estimated_A, 256);
-    subplot(2, 2, i);
+    [n, x] = hist(estimated_A, 256);
+    subplot(3, 2, i);
     plot(x, n / (sum(n) * (x(2) - x(1))), 'r-', x, normpdf(x, A, sqrt(sig_sq * (1 + rho) / 2)));
     title(strcat('rho = ', num2str(rho)));
     legend('Simulated', 'Theoretical');
     
+    log = strcat('---- rho =', num2str(rho));
+    log = strcat(log, ' ----');
+    disp(log);
+    disp(strcat('theoretical variance: ', num2str(sig_sq * (1 + rho) / 2)));
+    disp(strcat('simulated variance: ', num2str(var(estimated_A))));
+    disp('------------');
+    
     i = i + 1;
 end
-
-
-disp(sig_sq * (1 + rho) / 2);
-disp(var(estimated_A));
-

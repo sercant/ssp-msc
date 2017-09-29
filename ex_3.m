@@ -7,6 +7,7 @@ pdf = 1 / (thetha ^ n);
 log_pdf = log(pdf);
 % take the first derrivative with respect to thetha
 diff_log_pdf = simplify(diff(log_pdf, thetha));
+disp('MLE estimator is:');
 disp(diff_log_pdf);
 disp('= 0');
 % we see here that to maximise the pdf we have to pick thetha value as big
@@ -31,6 +32,21 @@ for mc = 1:MC
     MLE_estimations(mc, 1) = MLE_est;
     A_estimations(mc, 1) = A_est_mean;
 end
+
+bias_sum = 0;
+for mc = 1:MC
+    bias_sum = bias_sum + MLE_estimations(mc, 1) - thetha;
+end
+bias = bias_sum / MC;
+disp(strcat('MLE estimated bias : ', num2str(bias)));
+
+bias_sum = 0;
+for mc = 1:MC
+    bias_sum = bias_sum + A_estimations(mc, 1) - thetha;
+end
+bias = bias_sum / MC;
+disp(strcat('A estimated bias : ', num2str(bias)));
+
 
 [p, x] = hist(MLE_estimations, 512);
 plot(x, p, 'r-');
