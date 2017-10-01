@@ -49,7 +49,7 @@ for rho = -1:1:1
     end
     
     [n, x] = hist(estimated_A, 256);
-    subplot(3, 2, i);
+    subplot(1, 3, i);
     plot(x, n / (sum(n) * (x(2) - x(1))), 'r-', x, normpdf(x, A, sqrt(sig_sq * (1 + rho) / 2)));
     title(strcat('rho = ', num2str(rho)));
     legend('Simulated', 'Theoretical');
