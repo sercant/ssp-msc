@@ -37,6 +37,6 @@ bias = bias_sum / MC;
 disp(strcat('estimated bias : ', num2str(bias)));
 
 % display histogram of the estimator
-[n x] = hist(estimations, 56);
+[n, x] = hist(estimations, 56);
 plot(x, n / (sum(n) * (x(2) - x(1))), 'r-', x, normpdf(x, A, sqrt(sigma_squared)));
 legend('Simulated', 'Theoretical');

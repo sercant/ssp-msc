@@ -19,7 +19,7 @@ disp('= 0');
 thetha = 3;
 N = 100;
 
-MC = 1000000;
+MC = 100000;
 
 MLE_estimations = zeros(MC, 1);
 A_estimations = zeros(MC, 1);
@@ -58,10 +58,33 @@ disp(strcat('MLE variance : ', num2str(var(MLE_estimations))));
 disp(strcat('A estimator variance : ', num2str(var(A_estimations))));
 disp('------------------');
 
+subplot(1, 2, 1);
 [p, x] = hist(MLE_estimations, 512);
 plot(x, p, 'r-');
 hold on;
 [p, x] = hist(A_estimations, 512);
 plot(x, p, 'b-');
 
+title('thetha=3');
 legend('MLE estimation', 'A est mean');
+
+hold on;
+
+thetha = 1;
+MLE_estimations_t_1 = zeros(MC, 1);
+for mc=1:MC
+    rvs = thetha * rand(N, 1);
+    MLE_est = max(rvs);
+    MLE_estimations_t_1(mc, 1) = MLE_est;
+end
+
+subplot(1, 2, 2);
+[p, x] = hist(MLE_estimations_t_1, 512);
+plot(x, p / (sum(p) * (x(2) - x(1))), 'r-');
+hold on;
+k = N;
+beta = betapdf(x, k, k - N + 1);
+plot(x, beta);
+
+title('thetha=1');
+legend('Simulated MLE', 'Theoretical MLE');
