@@ -1,3 +1,7 @@
+% (2557739) Sercan Turkmen
+% (2557726) Mahalakshmy Seetharaman
+% Task 2
+
 % x[0] = A + w[0]
 % x[1] = A + w[1]
 % C = sigma_squared * [1 rho; rho 1]

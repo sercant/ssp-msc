@@ -1,3 +1,7 @@
+% (2557739) Sercan Turkmen
+% (2557726) Mahalakshmy Seetharaman
+% Task 1
+
 clearvars; clc; close all; format long;
 
 % input variables
