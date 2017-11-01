@@ -1,8 +1,8 @@
-% ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 %          STATISTICAL SIGNAL PROCESSING (Matlab Exercise #2)
 %                     (Least Square estimation)
 %
-% ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 % ***NOTE***: use the button "Run Section" to visualize the diagram of the
 % recorded positions of 'a' with respect to 'B'.
@@ -42,10 +42,29 @@ text(X(1)-2,Y(1)-1, 'a', 'Color', 'Blue', 'FontWeight', 'Bold', 'FontSize', 16);
 %  vector variable named P.
 %  
 
+% check if the data is logically sized
+if size(X) ~= size(Y)
+    disp('Sizes of X and Y does not met');
+end
 
+K = length(X);
 
+H = zeros(K * 2, 4);
+XY = zeros(K * 2, 1);
+for k = 1:K
+    H(k, 1) = cos(2 * pi / 72 * k);
+    H(k, 3) = 1;
+    H(k + K, 2) = sin(2 * pi / 72 * k);
+    H(k + K, 4) = 1;
+    
+    XY(k, 1) = X(k);
+    XY(k + K, 1) = Y(k);
+end
 
-
+% LS estimation
+P = (H' * H) \ H' * XY;
+% had to transpose to make it vector insted of row matrix
+P = P';
 
 % ************************************************************************
 % ************************************************************************
