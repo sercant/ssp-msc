@@ -1,3 +1,6 @@
+% Statistical Signal Processing MATLAB assignment
+% 
+
 close;
 clc;
 clear;
@@ -10,3 +13,4 @@ initMeanVec = initThreshold.*ones(1,max(size(data)));
 hold on
 plot(timet,initMeanVec,'r--');
 disp(['Initial Probability of False Alarm is: ',num2str(qfunc(initThreshold))])
+% logicalmat = 
