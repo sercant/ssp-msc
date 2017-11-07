@@ -79,4 +79,5 @@ end
 plot(periods, 'o-');
 title("Periods of the pulse");
 
-
+disp("Pulse Width mean=" + mean(w) + " variance=" + var(w));
+disp("Pulse Period mean=" + mean(periods) + " variance=" + var(periods));
