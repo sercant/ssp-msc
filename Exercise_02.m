@@ -49,6 +49,7 @@ end
 
 K = length(X);
 
+% form the observation matrix and combine X and Y in to a single matrix
 H = zeros(K * 2, 4);
 XY = zeros(K * 2, 1);
 for k = 1:K

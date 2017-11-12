@@ -1,8 +1,7 @@
 clearvars; clc; close all; format long;
+load data_high_snr;
 
 value_in_dbm = @(val) 10 * log10(abs(val) .^ 2);
-
-load data_high_snr;
 
 % energy detector
 threshold = sum(data .^ 2);
@@ -10,12 +9,12 @@ threshold = sum(data .^ 2);
 threshold_in_dbm = value_in_dbm(threshold);
 data_in_dbm = value_in_dbm(data);
 
-% comparator for seperating samples
+% comparator for seperating H1 samples
 more_than_threshold = data_in_dbm >= threshold_in_dbm;
 over_threshold_data = data_in_dbm(more_than_threshold);
 over_threshold_timet = timet(more_than_threshold);
 
-% comparator for seperating samples
+% comparator for seperating H0 samples
 less_than_threshold = data_in_dbm < threshold_in_dbm;
 under_threshold_data = data_in_dbm(less_than_threshold);
 under_threshold_timet = timet(less_than_threshold);
@@ -65,12 +64,14 @@ disp("pfa =" + pfa);
 % Pulse width and period
 subplot(2,2,3);
 
+% we used MinPeakProminence avoid detecting multiple peaks on a single pulse.
 [pks, locs, w, p] = findpeaks(data_in_dbm, timet, 'MinPeakHeight', threshold_in_dbm, 'MinPeakProminence', 5);
 plot(w, 'o-');
 title("Widths of the pulse");
 hold on;
 
 subplot(2,2,4);
+% calculate the distance between the peak points to get the period
 periods = zeros(1, length(locs)-1);
 for i = 1:(length(locs)-1)
    periods(1, i) = locs(1, i + 1) - locs(1, i);
